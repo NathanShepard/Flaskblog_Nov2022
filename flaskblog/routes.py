@@ -12,7 +12,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = Post.query.all()
+    posts = Post.query.paginate(per_page=5)
     return render_template('home.html', posts=posts)
 
 
@@ -129,7 +129,7 @@ def update_post(post_id):
         post.title = form.title.data
         post.content = form.content.data
         db.session.commit()
-        flash('Your post has been updated!', 'info')
+        flash('Your post has been updated!', 'success')
         return redirect(url_for('post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
@@ -139,11 +139,11 @@ def update_post(post_id):
 
 
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
-@login_required
+@login_required  # means that you must be loged in...
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
-        abort(403)
+        abort(403)  # error page for this if not a valaid url...
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
