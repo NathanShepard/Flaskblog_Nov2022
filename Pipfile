@@ -12,6 +12,8 @@ flask-sqlalchemy = "*"
 flask-bcrypt = "*"
 flask-login = "*"
 pillow = "*"
+itsdangerous = "==2.0.1"
+flask-mail = "*"
 
 [dev-packages]
 
